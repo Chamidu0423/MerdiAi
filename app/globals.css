@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
-@import '../styles/glass-card.css';
 
 @custom-variant dark (&:is(.dark *));
 

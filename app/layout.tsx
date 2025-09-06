@@ -5,8 +5,8 @@ import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Suspense } from "react"
-import "./globals.css"
 import Script from "next/script"
+import "./globals.css"
 
 export const metadata: Metadata = {
   title: "MerdiAI - Turn your text to diagram",
@@ -30,7 +30,7 @@ export default function RootLayout({
         </head>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
         <Suspense fallback={null}>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
             {children}
           </ThemeProvider>
           <Analytics />
