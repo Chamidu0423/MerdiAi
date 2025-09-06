@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Suspense } from "react"
 import "./globals.css"
+import Script from "next/script"
 
 export const metadata: Metadata = {
   title: "MerdiAI - Turn your text to diagram",
@@ -20,6 +21,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <Script 
+          type="module" 
+          src="https://unpkg.com/@splinetool/viewer@1.10.56/build/spline-viewer.js"
+          strategy="beforeInteractive"
+        />
+        </head>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
         <Suspense fallback={null}>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
