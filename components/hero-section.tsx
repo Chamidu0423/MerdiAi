@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button"
+import { SplineScene } from "./spline-scene"
 
 export function HeroSection() {
   return (
-    <section className="flex-1 flex items-start justify-start px-6 py-12">
-      <div className="w-full">
-  <div className="glass-card w-full p-12 md:p-16 min-h-[500px]">
-          <div className="max-w-2xl w-full text-left">
+    <section className="flex-1 flex items-start justify-start px-6 py-12 relative">
+      <div className="w-full relative z-10">
+        <div className="glass-card w-full p-12 md:p-16 min-h-[500px] relative">
+          <div className="max-w-2xl w-full text-left relative z-20">
             <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight text-balance">
               Turn your text to diagram with MerdiAI
             </h1>
@@ -19,6 +20,13 @@ export function HeroSection() {
               <Button variant="link" size="lg" className="text-muted-foreground hover:text-foreground">
                 Learn more
               </Button>
+            </div>
+          </div>
+          
+          {/* 3D Spline Scene positioned behind the glass card on the right side */}
+          <div className="absolute top-0 right-0 w-1/2 h-full z-0 overflow-hidden rounded-r-2xl">
+            <div className="w-full h-full opacity-30 blur-sm">
+              <SplineScene className="w-full h-full" />
             </div>
           </div>
         </div>
