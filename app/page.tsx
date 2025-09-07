@@ -6,6 +6,7 @@ export default function Home() {
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
       <HeroSection />
+      {/* main - UI */}
     </div>
   )
 }
