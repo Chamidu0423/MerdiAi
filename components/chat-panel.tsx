@@ -1,5 +1,8 @@
-import {ChevronLeft, SendHorizonal } from "lucide-react";
+"use client";
+import { ChevronLeft, SendHorizonal } from "lucide-react";
+import { useRouter } from "next/navigation";
 const ChatPanel = () => {
+  const router = useRouter();
   return (
     <div
       className="
@@ -11,7 +14,7 @@ const ChatPanel = () => {
     >
       {/* Header */}
       <div className="flex items-center gap-2">
-        <button className="p-2 cursor-pointer">
+        <button className="p-2 cursor-pointer" onClick={() => router.push("/")}>
           <ChevronLeft className=" w-7 h-7 text-black dark:text-white" />
         </button>
         <div className="flex items-center gap-2">
@@ -22,9 +25,7 @@ const ChatPanel = () => {
 
       {/* Center content */}
       <div className="flex flex-col items-center justify-center flex-1 text-center">
-        <div className="text-2xl mb-4 text-black dark:text-white">
-          ✨
-        </div>
+        <div className="text-2xl mb-4 text-black dark:text-white">✨</div>
         <h1 className="text-xl md:text-2xl text-black dark:text-white">
           Say our AI anything
         </h1>

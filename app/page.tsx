@@ -1,6 +1,5 @@
 import { Header } from "@/components/header"
 import { HeroSection } from "@/components/hero-section"
-import MainUI from "@/components/main-ui"
 
 export default function Home() {
   return (
@@ -8,7 +7,6 @@ export default function Home() {
       <Header />
       <HeroSection />
       {/* main - UI */}
-      <MainUI /> 
     </div>
   )
 }
