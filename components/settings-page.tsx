@@ -156,7 +156,7 @@ const SettingsPage = () => {
             <button
               onClick={handleSave}
               disabled={isSaving || !formData.modelName.trim() || !formData.apiKey.trim()}
-              className="px-6 py-3 rounded-lg bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium transition-all duration-300 flex items-center gap-2"
+              className="px-6 py-3 rounded-lg bg-black hover:bg-zinc-900 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium transition-all duration-300 flex items-center gap-2"
             >
               <Save className="w-4 h-4" />
               {isSaving ? 'Saving...' : 'Save Settings'}
@@ -167,7 +167,7 @@ const SettingsPage = () => {
         {/* Info Section */}
         <div className="mt-6 p-4 bg-blue-100/50 dark:bg-blue-900/20 rounded-lg border border-blue-300/50 dark:border-blue-700/50">
           <h3 className="text-sm font-medium text-blue-800 dark:text-blue-300 mb-2">
-            💡 Getting Started with OpenRouter
+             Getting Started with OpenRouter
           </h3>
           <ul className="text-xs text-blue-700 dark:text-blue-400 space-y-1">
             <li>• Visit <a href="https://openrouter.ai" target="_blank" rel="noopener noreferrer" className="underline">openrouter.ai</a> to get your API key</li>
