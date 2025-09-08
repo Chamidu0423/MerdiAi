@@ -1,5 +1,5 @@
 "use client";
-import { ChevronLeft, SendHorizonal } from "lucide-react";
+import { ChevronLeft, SendHorizonal , Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
 const ChatPanel = () => {
   const router = useRouter();
@@ -32,15 +32,28 @@ const ChatPanel = () => {
       </div>
 
       {/* Input area */}
-      <div className="relative">
+      <div className="relative w-full">
         <input
           type="text"
           placeholder="Say your Scenario..."
-          className="w-full rounded-full border bg-white dark:bg-neutral-800/50 px-10 py-6 pr-12 text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-black/50 duration-300"
+          className="w-full rounded-full border bg-white dark:bg-neutral-800/50 px-6 py-6 pr-20 text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-black/50 duration-300"
         />
-        <button className="absolute right-5 top-1/2 -translate-y-1/2 p-3 rounded-full hover:bg-gray-200 dark:hover:bg-neutral-700 transition cursor-pointer text-black/50 hover:text-black duration-300 dark:text-white/50 dark:hover:text-white">
-          <SendHorizonal className="w-7 h-7" />
-        </button>
+
+        {/* Button container - positioned inside the input */}
+        <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+          {/* Settings button */}
+          <button 
+            onClick={() => router.push('/settings')}
+            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-neutral-700 transition cursor-pointer text-black/50 hover:text-black duration-300 dark:text-white/50 dark:hover:text-white"
+          >
+            <Settings className="w-5 h-5" />
+          </button>
+          
+          {/* Send button */}
+          <button className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-neutral-700 transition cursor-pointer text-black/50 hover:text-black duration-300 dark:text-white/50 dark:hover:text-white">
+            <SendHorizonal className="w-5 h-5" />
+          </button>
+        </div>
       </div>
     </div>
   );
