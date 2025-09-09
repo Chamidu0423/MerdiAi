@@ -146,17 +146,11 @@ const SettingsPage = () => {
           )}
 
           {/* Action Buttons */}
-          <div className="flex gap-3 justify-end">
-            <button
-              onClick={handleBack}
-              className="px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-600 text-black dark:text-white hover:bg-white/10 dark:hover:bg-white/5 transition-all duration-300"
-            >
-              Back
-            </button>
+          <div className="flex justify-end">
             <button
               onClick={handleSave}
               disabled={isSaving || !formData.modelName.trim() || !formData.apiKey.trim()}
-              className="px-6 py-3 rounded-lg bg-black hover:bg-zinc-900 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium transition-all duration-300 flex items-center gap-2"
+              className="px-6 py-3 rounded-full bg-black hover:bg-zinc-900 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105"
             >
               <Save className="w-4 h-4" />
               {isSaving ? 'Saving...' : 'Save Settings'}
