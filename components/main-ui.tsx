@@ -6,6 +6,22 @@ import FlowchartPanel from "./flowchart-panel";
 
 const MainUI = () => {
   const [activeTab, setActiveTab] = useState<'chat' | 'diagram'>('chat');
+  const [mermaidCode, setMermaidCode] = useState<string>("");
+  const [error, setError] = useState<string>("");
+
+  const handleDiagramGenerated = (code: string) => {
+    setMermaidCode(code);
+    setError(""); // Clear any previous errors
+    // Auto-switch to diagram tab on mobile after generation
+    if (window.innerWidth < 768) {
+      setActiveTab('diagram');
+    }
+  };
+
+  const handleError = (errorMessage: string) => {
+    setError(errorMessage);
+    setMermaidCode(""); // Clear any previous diagram
+  };
 
   return (
     <>
@@ -42,13 +58,29 @@ const MainUI = () => {
 
       <main className="flex h-screen w-full bg-white dark:bg-neutral-900 transition-colors">
         <div className="hidden md:flex w-full">
-          <ChatPanel />
-          <FlowchartPanel />
+          <ChatPanel 
+            onDiagramGenerated={handleDiagramGenerated}
+            onError={handleError}
+          />
+          <FlowchartPanel 
+            mermaidCode={mermaidCode}
+            error={error}
+          />
         </div>
 
         <div className="md:hidden w-full">
-          {activeTab === 'chat' && <ChatPanel />}
-          {activeTab === 'diagram' && <FlowchartPanel />}
+          {activeTab === 'chat' && (
+            <ChatPanel 
+              onDiagramGenerated={handleDiagramGenerated}
+              onError={handleError}
+            />
+          )}
+          {activeTab === 'diagram' && (
+            <FlowchartPanel 
+              mermaidCode={mermaidCode}
+              error={error}
+            />
+          )}
         </div>
       </main>
     </>

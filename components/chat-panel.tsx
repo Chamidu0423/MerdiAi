@@ -1,8 +1,48 @@
 "use client";
-import { ChevronLeft, SendHorizonal , Settings } from "lucide-react";
+import { ChevronLeft, SendHorizonal, Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
-const ChatPanel = () => {
+import { useState } from "react";
+import { LLMService } from "@/lib/llm-service";
+
+interface ChatPanelProps {
+  onDiagramGenerated: (mermaidCode: string) => void;
+  onError: (error: string) => void;
+}
+
+const ChatPanel = ({ onDiagramGenerated, onError }: ChatPanelProps) => {
   const router = useRouter();
+  const [inputText, setInputText] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const handleSendMessage = async () => {
+    if (!inputText.trim() || isGenerating) return;
+    
+    try {
+      setIsGenerating(true);
+      onError(""); // Clear any previous errors
+      
+      const response = await LLMService.generateMermaidDiagram(inputText.trim());
+      
+      if (response.success && response.mermaidCode) {
+        onDiagramGenerated(response.mermaidCode);
+        setInputText(""); // Clear input on success
+      } else {
+        onError(response.error || "Failed to generate diagram");
+      }
+    } catch (error) {
+      console.error("Error generating diagram:", error);
+      onError("An unexpected error occurred while generating the diagram");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
   return (
     <div
       className="
@@ -25,8 +65,13 @@ const ChatPanel = () => {
       <div className="flex flex-col items-center justify-center flex-1 text-center px-6">
         <div className="text-2xl mb-4 text-black dark:text-white">✨</div>
         <h1 className="text-xl md:text-2xl text-black dark:text-white">
-          Say our AI anything
+          {isGenerating ? "Generating your diagram..." : "Say our AI anything"}
         </h1>
+        {isGenerating && (
+          <div className="mt-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          </div>
+        )}
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 md:right-1/2 p-6 bg-gradient-to-t from-white/95 via-white/90 to-transparent dark:from-neutral-900/95 dark:via-neutral-900/90 backdrop-blur-sm">
@@ -34,20 +79,29 @@ const ChatPanel = () => {
           <input
             type="text"
             placeholder="Say your Scenario..."
-            className="w-full rounded-full border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-6 py-6 pr-20 text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-lg transition-all duration-300"
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            onKeyPress={handleKeyPress}
+            disabled={isGenerating}
+            className="w-full rounded-full border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-6 py-6 pr-20 text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           />
 
           <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
             {/* Settings button */}
             <button 
               onClick={() => router.push('/settings')}
-              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-neutral-700 transition cursor-pointer text-black/50 hover:text-black duration-300 dark:text-white/50 dark:hover:text-white"
+              disabled={isGenerating}
+              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-neutral-700 transition cursor-pointer text-black/50 hover:text-black duration-300 dark:text-white/50 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Settings className="w-5 h-5" />
             </button>
             
             {/* Send button */}
-            <button className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-neutral-700 transition cursor-pointer text-black/50 hover:text-black duration-300 dark:text-white/50 dark:hover:text-white">
+            <button 
+              onClick={handleSendMessage}
+              disabled={!inputText.trim() || isGenerating}
+              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-neutral-700 transition cursor-pointer text-black/50 hover:text-black duration-300 dark:text-white/50 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               <SendHorizonal className="w-5 h-5" />
             </button>
           </div>
