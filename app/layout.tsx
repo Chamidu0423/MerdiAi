@@ -10,7 +10,6 @@ import "./globals.css"
 export const metadata: Metadata = {
   title: "MerdiAI - Turn your text to diagram",
   description: "We build high-quality, scalable platforms using the best tools for the job, no shortcuts.",
-  generator: "v0.app",
   icons: {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
