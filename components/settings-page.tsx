@@ -93,11 +93,11 @@ const SettingsPage = () => {
               type="text"
               value={formData.modelName}
               onChange={(e) => handleInputChange('modelName', e.target.value)}
-              placeholder="e.g., gpt-4o, claude-3-5-sonnet-20241022"
+              placeholder="e.g: gpt-4o, claude-3-5-sonnet"
               className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-neutral-800/50 px-4 py-3 text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all duration-300"
             />
             <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-              Enter the model name from OpenRouter (e.g., openai/gpt-4o)
+              Enter the model name from OpenRouter (e.g: openai/gpt-4o)
             </p>
           </div>
 

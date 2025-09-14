@@ -65,22 +65,23 @@ const MainUI = () => {
           <FlowchartPanel 
             mermaidCode={mermaidCode}
             error={error}
+            key={mermaidCode ? mermaidCode : 'empty'}
           />
         </div>
 
-        <div className="md:hidden w-full">
-          {activeTab === 'chat' && (
+        <div className="md:hidden w-full relative">
+          <div style={{ display: activeTab === 'chat' ? 'block' : 'none' }} className="h-full">
             <ChatPanel 
               onDiagramGenerated={handleDiagramGenerated}
               onError={handleError}
             />
-          )}
-          {activeTab === 'diagram' && (
+          </div>
+          <div style={{ display: activeTab === 'diagram' ? 'block' : 'none' }} className="h-full">
             <FlowchartPanel 
               mermaidCode={mermaidCode}
               error={error}
             />
-          )}
+          </div>
         </div>
       </main>
     </>
