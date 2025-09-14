@@ -6,6 +6,22 @@ import FlowchartPanel from "./flowchart-panel";
 
 const MainUI = () => {
   const [activeTab, setActiveTab] = useState<'chat' | 'diagram'>('chat');
+  const [mermaidCode, setMermaidCode] = useState<string>("");
+  const [error, setError] = useState<string>("");
+
+  const handleDiagramGenerated = (code: string) => {
+    setMermaidCode(code);
+    setError(""); // Clear any previous errors
+
+    if (window.innerWidth < 768) {
+      setActiveTab('diagram');
+    }
+  };
+
+  const handleError = (errorMessage: string) => {
+    setError(errorMessage);
+    setMermaidCode(""); // Clear any previous diagram
+  };
 
   return (
     <>
@@ -42,13 +58,30 @@ const MainUI = () => {
 
       <main className="flex h-screen w-full bg-white dark:bg-neutral-900 transition-colors">
         <div className="hidden md:flex w-full">
-          <ChatPanel />
-          <FlowchartPanel />
+          <ChatPanel 
+            onDiagramGenerated={handleDiagramGenerated}
+            onError={handleError}
+          />
+          <FlowchartPanel 
+            mermaidCode={mermaidCode}
+            error={error}
+            key={mermaidCode ? mermaidCode : 'empty'}
+          />
         </div>
 
-        <div className="md:hidden w-full">
-          {activeTab === 'chat' && <ChatPanel />}
-          {activeTab === 'diagram' && <FlowchartPanel />}
+        <div className="md:hidden w-full relative">
+          <div style={{ display: activeTab === 'chat' ? 'block' : 'none' }} className="h-full">
+            <ChatPanel 
+              onDiagramGenerated={handleDiagramGenerated}
+              onError={handleError}
+            />
+          </div>
+          <div style={{ display: activeTab === 'diagram' ? 'block' : 'none' }} className="h-full">
+            <FlowchartPanel 
+              mermaidCode={mermaidCode}
+              error={error}
+            />
+          </div>
         </div>
       </main>
     </>

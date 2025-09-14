@@ -5,7 +5,9 @@ import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Suspense } from "react"
+
 import "./globals.css"
+import "../styles/mermaid.css"
 
 export const metadata: Metadata = {
   title: "MerdiAI - Turn your text to diagram",
