@@ -63,31 +63,31 @@ const ChatPanel = ({ onDiagramGenerated, onError }: ChatPanelProps) => {
       </div>
 
       <div className="flex flex-col items-center justify-center flex-1 text-center px-6">
-        <div className="text-2xl mb-4 text-black dark:text-white">✨</div>
-        <h1 className="text-xl md:text-2xl text-black dark:text-white">
-          {isGenerating ? "Generating your diagram..." : "Say our AI anything"}
-        </h1>
-        {isGenerating && (
-          <div className="mt-4">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          <div className="text-2xl mb-4 text-black dark:text-white">
+            {isGenerating ? (
+              <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2728/512.gif" alt="✨" width="32" height="32" className="mx-auto" />
+            ) : (
+              '✨'
+            )}
           </div>
-        )}
-      </div>
+          <h1 className="text-xl md:text-2xl text-black dark:text-white">
+            {isGenerating ? "Generating your diagram..." : "Say our AI anything"}
+          </h1>
+        </div>
 
-      <div className="fixed bottom-0 left-0 right-0 md:right-1/2 p-6 bg-gradient-to-t from-white/95 via-white/90 to-transparent dark:from-neutral-900/95 dark:via-neutral-900/90 backdrop-blur-sm">
-        <div className="relative w-full max-w-2xl mx-auto">
-          <input
-            type="text"
-            placeholder="Say your Scenario..."
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            onKeyPress={handleKeyPress}
-            disabled={isGenerating}
-            className="w-full rounded-full border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-6 py-6 pr-20 text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-          />
+        <div className={`fixed bottom-0 left-0 right-0 md:right-1/2 p-6 bg-gradient-to-t from-white/95 via-white/90 to-transparent dark:from-neutral-900/95 dark:via-neutral-900/90 backdrop-blur-sm`}>
+          <div className="relative w-full max-w-2xl mx-auto">
+            <input
+              type="text"
+              placeholder="Say your Scenario..."
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              onKeyPress={handleKeyPress}
+              disabled={isGenerating}
+              className={`w-full rounded-full border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-6 py-6 pr-20 text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${isGenerating ? 'rainbow-border-animate' : ''}`}
+            />
 
           <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-            {/* Settings button */}
             <button 
               onClick={() => router.push('/settings')}
               disabled={isGenerating}
@@ -96,7 +96,6 @@ const ChatPanel = ({ onDiagramGenerated, onError }: ChatPanelProps) => {
               <Settings className="w-5 h-5" />
             </button>
             
-            {/* Send button */}
             <button 
               onClick={handleSendMessage}
               disabled={!inputText.trim() || isGenerating}

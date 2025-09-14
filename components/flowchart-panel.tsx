@@ -50,7 +50,6 @@ const FlowchartPanel = ({ mermaidCode, error }: FlowchartPanelProps) => {
           />
         </div>
 
-        {/* Code Display (Optional - for debugging) */}
         {mermaidCode && (
           <details className="mt-4">
             <summary className="cursor-pointer text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors">

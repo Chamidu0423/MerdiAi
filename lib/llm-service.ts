@@ -1,4 +1,3 @@
-// LLM API service for generating Mermaid diagrams
 export interface LLMSettings {
   modelName: string;
   apiKey: string;
@@ -13,42 +12,47 @@ export interface LLMResponse {
 export class LLMService {
   private static getSettings(): LLMSettings | null {
     try {
-      const settings = localStorage.getItem('merdiai-settings');
+      const settings = localStorage.getItem("merdiai-settings");
       return settings ? JSON.parse(settings) : null;
     } catch (error) {
-      console.error('Error reading settings from localStorage:', error);
+      console.error("Error reading settings from localStorage:", error);
       return null;
     }
   }
 
   static async generateMermaidDiagram(userText: string): Promise<LLMResponse> {
     const settings = this.getSettings();
-    
+
     if (!settings || !settings.apiKey || !settings.modelName) {
       return {
         success: false,
-        error: 'Please configure your API settings in the Settings page first.'
+        error: "Please configure your API settings in the Settings page first.",
       };
     }
 
     try {
-      // Determine API endpoint based on API key format and model name
-      const isOpenRouterKey = settings.apiKey.startsWith('sk-or-v1');
-      const isOpenAI = settings.modelName.toLowerCase().includes('gpt') && !isOpenRouterKey;
-      const isClaude = settings.modelName.toLowerCase().includes('claude') && !isOpenRouterKey;
-      
-      // Debug logging
-      console.log('API Key type:', isOpenRouterKey ? 'OpenRouter' : 'Direct Provider');
-      console.log('Model name:', settings.modelName);
-      console.log('Routing to:', isOpenAI ? 'OpenAI' : isClaude ? 'Anthropic' : 'OpenRouter');
-      
-      let apiUrl = '';
+      const isOpenRouterKey = settings.apiKey.startsWith("sk-or-v1");
+      const isOpenAI =
+        settings.modelName.toLowerCase().includes("gpt") && !isOpenRouterKey;
+      const isClaude =
+        settings.modelName.toLowerCase().includes("claude") && !isOpenRouterKey;
+
+      console.log(
+        "API Key type:",
+        isOpenRouterKey ? "OpenRouter" : "Direct Provider"
+      );
+      console.log("Model name:", settings.modelName);
+      console.log(
+        "Routing to:",
+        isOpenAI ? "OpenAI" : isClaude ? "Anthropic" : "OpenRouter"
+      );
+
+      let apiUrl = "";
       let headers: Record<string, string> = {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       };
       let requestBody: any = {};
 
-      // System prompt for all providers
       const systemPrompt = `You are an expert at creating Mermaid.js diagrams. Generate a Mermaid diagram based on the user's text description. 
 
 CRITICAL RULES:
@@ -80,124 +84,126 @@ Remember: Return ONLY valid Mermaid syntax, nothing else!`;
 
       if (isOpenAI) {
         // Direct OpenAI API
-        apiUrl = 'https://api.openai.com/v1/chat/completions';
-        headers['Authorization'] = `Bearer ${settings.apiKey}`;
+        apiUrl = "https://api.openai.com/v1/chat/completions";
+        headers["Authorization"] = `Bearer ${settings.apiKey}`;
         requestBody = {
           model: settings.modelName,
           messages: [
             {
-              role: 'system',
-              content: systemPrompt
+              role: "system",
+              content: systemPrompt,
             },
             {
-              role: 'user',
-              content: userText
-            }
+              role: "user",
+              content: userText,
+            },
           ],
           max_tokens: 1000,
-          temperature: 0.3
+          temperature: 0.3,
         };
       } else if (isClaude) {
         // Direct Anthropic API
-        apiUrl = 'https://api.anthropic.com/v1/messages';
-        headers['x-api-key'] = settings.apiKey;
-        headers['anthropic-version'] = '2023-06-01';
+        apiUrl = "https://api.anthropic.com/v1/messages";
+        headers["x-api-key"] = settings.apiKey;
+        headers["anthropic-version"] = "2023-06-01";
         requestBody = {
           model: settings.modelName,
           max_tokens: 1000,
           messages: [
             {
-              role: 'user',
-              content: `${systemPrompt}\n\nUser request: ${userText}`
-            }
-          ]
+              role: "user",
+              content: `${systemPrompt}\n\nUser request: ${userText}`,
+            },
+          ],
         };
       } else {
         // OpenRouter API (unified endpoint for multiple providers)
-        apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
-        headers['Authorization'] = `Bearer ${settings.apiKey}`;
-        headers['HTTP-Referer'] = typeof window !== 'undefined' ? window.location.origin : 'https://localhost:3000';
-        headers['X-Title'] = 'MerdiAI';
+        apiUrl = "https://openrouter.ai/api/v1/chat/completions";
+        headers["Authorization"] = `Bearer ${settings.apiKey}`;
+        headers["HTTP-Referer"] =
+          typeof window !== "undefined"
+            ? window.location.origin
+            : "https://localhost:3000";
+        headers["X-Title"] = "MerdiAI";
         requestBody = {
           model: settings.modelName,
           messages: [
             {
-              role: 'system',
-              content: systemPrompt
+              role: "system",
+              content: systemPrompt,
             },
             {
-              role: 'user',
-              content: userText
-            }
+              role: "user",
+              content: userText,
+            },
           ],
           max_tokens: 1000,
-          temperature: 0.3
+          temperature: 0.3,
         };
       }
 
       const response = await fetch(apiUrl, {
-        method: 'POST',
+        method: "POST",
         headers,
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
         const errorData = await response.text();
         return {
           success: false,
-          error: `API Error (${response.status}): ${errorData}`
+          error: `API Error (${response.status}): ${errorData}`,
         };
       }
 
       const data = await response.json();
-      
-      let mermaidCode = '';
-      
+
+      let mermaidCode = "";
+
       if (isOpenAI || isOpenRouterKey) {
         // OpenAI format (used by OpenAI directly and OpenRouter)
-        mermaidCode = data.choices?.[0]?.message?.content?.trim() || '';
+        mermaidCode = data.choices?.[0]?.message?.content?.trim() || "";
       } else if (isClaude) {
         // Anthropic format
-        mermaidCode = data.content?.[0]?.text?.trim() || '';
+        mermaidCode = data.content?.[0]?.text?.trim() || "";
       }
 
       if (!mermaidCode) {
         return {
           success: false,
-          error: 'No diagram code received from the API'
+          error: "No diagram code received from the API",
         };
       }
 
-      // Clean up the mermaid code (remove any markdown formatting if present)
       mermaidCode = mermaidCode
-        .replace(/```mermaid\s*/g, '')
-        .replace(/```\s*/g, '')
-        .replace(/^---+\s*/g, '') // Remove leading dashes
-        .replace(/\s*---+$/g, '') // Remove trailing dashes
-        .replace(/^[\s\n]*/, '') // Remove leading whitespace and newlines
-        .replace(/[\s\n]*$/, '') // Remove trailing whitespace and newlines
+        .replace(/```mermaid\s*/g, "")
+        .replace(/```\s*/g, "")
+        .replace(/^---+\s*/g, "") // Remove leading dashes
+        .replace(/\s*---+$/g, "") // Remove trailing dashes
+        .replace(/^[\s\n]*/, "") // Remove leading whitespace and newlines
+        .replace(/[\s\n]*$/, "") // Remove trailing whitespace and newlines
         .trim();
 
-      // Additional validation to ensure we have valid Mermaid code
       if (!mermaidCode || mermaidCode.length < 5) {
         return {
           success: false,
-          error: 'Received empty or invalid diagram code from the API'
+          error: "Received empty or invalid diagram code from the API",
         };
       }
 
-      console.log('Cleaned Mermaid code:', mermaidCode);
+      console.log("Cleaned Mermaid code:", mermaidCode);
 
       return {
         success: true,
-        mermaidCode
+        mermaidCode,
       };
-
     } catch (error) {
-      console.error('Error calling LLM API:', error);
+      console.error("Error calling LLM API:", error);
       return {
         success: false,
-        error: `Network error: ${error instanceof Error ? error.message : 'Unknown error'}`
+        error: `Network error: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`,
       };
     }
   }

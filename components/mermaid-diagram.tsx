@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import mermaid from 'mermaid';
+import { useEffect, useRef, useState } from "react";
+import mermaid from "mermaid";
+import { Download } from "lucide-react";
 
 interface MermaidDiagramProps {
   code: string;
@@ -9,140 +10,125 @@ interface MermaidDiagramProps {
 }
 
 export function MermaidDiagram({ code, onError }: MermaidDiagramProps) {
-  const elementRef = useRef<HTMLDivElement>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [diagramId] = useState(() => `mermaid-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
+  const [svg, setSvg] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const diagramId = `mermaid-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  const svgContainerRef = useRef<HTMLDivElement>(null);
+
+  const containerStyle: React.CSSProperties = {
+    height: "calc(100vh - 140px)",
+    maxHeight: "calc(100vh - 120px)"
+  };
 
   useEffect(() => {
-    // Initialize mermaid with configuration
-    mermaid.initialize({
-      startOnLoad: false,
-      theme: 'default',
-      securityLevel: 'loose',
-      fontFamily: 'Inter, system-ui, sans-serif',
-      flowchart: {
-        useMaxWidth: true,
-        htmlLabels: true,
-        curve: 'basis'
-      },
-      sequence: {
-        useMaxWidth: true,
-        actorMargin: 50,
-        width: 150,
-        height: 65,
-        boxMargin: 10,
-        boxTextMargin: 5,
-        noteMargin: 10,
-        messageMargin: 35
-      },
-      class: {
-        useMaxWidth: true
-      },
-      er: {
-        useMaxWidth: true
-      },
-      journey: {
-        useMaxWidth: true
-      },
-      gantt: {
-        useMaxWidth: true,
-        fontSize: 11,
-        numberSectionStyles: 4
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    if (!code || !elementRef.current) {
+    if (!code) {
+      setSvg("");
+      setError(null);
       setIsLoading(false);
       return;
     }
+    setIsLoading(true);
+    setError(null);
 
-    const renderDiagram = async () => {
+    const cleanCode = code
+      .replace(/^---+\s*/g, "")
+      .replace(/\s*---+$/g, "")
+      .trim();
+
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: "default",
+      securityLevel: "loose",
+      fontFamily: "Inter, system-ui, sans-serif",
+      flowchart: { useMaxWidth: true, htmlLabels: true, curve: "basis" },
+      sequence: { useMaxWidth: true, actorMargin: 50, width: 150, height: 65, boxMargin: 10, boxTextMargin: 5, noteMargin: 10, messageMargin: 35 },
+      class: { useMaxWidth: true },
+      er: { useMaxWidth: true },
+      journey: { useMaxWidth: true },
+      gantt: { useMaxWidth: true, fontSize: 11, numberSectionStyles: 4 }
+    });
+
+    (async function() {
       try {
-        setIsLoading(true);
-        
-        console.log('Attempting to render Mermaid code:', code);
-        
-        // Clear previous content
-        if (elementRef.current) {
-          elementRef.current.innerHTML = '';
+        await mermaid.parse(cleanCode);
+        const renderResult = await mermaid.render(diagramId, cleanCode);
+        let svgOut = "";
+        if (typeof renderResult === "string") {
+          svgOut = renderResult;
+        } else if (renderResult && typeof renderResult === "object" && "svg" in renderResult) {
+          svgOut = renderResult.svg;
+        } else {
+          svgOut = String(renderResult);
         }
-
-        // Clean the code one more time to ensure it's valid
-        const cleanCode = code
-          .replace(/^---+\s*/g, '') // Remove leading dashes
-          .replace(/\s*---+$/g, '') // Remove trailing dashes
-          .trim();
-
-        console.log('Cleaned code for rendering:', cleanCode);
-
-        // Validate and render the diagram
-        const isValid = await mermaid.parse(cleanCode);
-        if (!isValid) {
-          throw new Error('Invalid Mermaid syntax');
-        }
-
-        const { svg } = await mermaid.render(diagramId, cleanCode);
-        
-        if (elementRef.current) {
-          elementRef.current.innerHTML = svg;
-          
-          // Make the SVG responsive
-          const svgElement = elementRef.current.querySelector('svg');
-          if (svgElement) {
-            svgElement.style.maxWidth = '100%';
-            svgElement.style.height = 'auto';
-            svgElement.style.display = 'block';
-            svgElement.style.margin = '0 auto';
-          }
-        }
-        
-        console.log('Diagram rendered successfully');
+        setSvg(svgOut);
         setIsLoading(false);
-      } catch (error) {
-        console.error('Error rendering Mermaid diagram:', error);
-        console.error('Failed code:', code);
+      } catch (err) {
+        setSvg("");
         setIsLoading(false);
-        
-        const errorMessage = error instanceof Error ? error.message : 'Failed to render diagram';
-        onError?.(errorMessage);
-        
-        // Show error in the component
-        if (elementRef.current) {
-          elementRef.current.innerHTML = `
-            <div class="flex items-center justify-center h-40 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-              <div class="text-center">
-                <div class="text-red-600 dark:text-red-400 text-sm font-medium mb-1">
-                  Diagram Render Error
-                </div>
-                <div class="text-red-500 dark:text-red-300 text-xs mb-2">
-                  ${errorMessage}
-                </div>
-                <details class="text-left">
-                  <summary class="text-xs text-red-400 cursor-pointer">Show code</summary>
-                  <pre class="text-xs text-red-300 mt-1 p-2 bg-red-900/10 rounded whitespace-pre-wrap">${code}</pre>
-                </details>
-              </div>
-            </div>
-          `;
-        }
+        const errorMessage = err instanceof Error ? err.message : "Failed to render diagram";
+        setError(errorMessage);
+        if (onError) onError(errorMessage);
       }
-    };
+    })();
+  }, [code]);
 
-    renderDiagram();
-  }, [code, diagramId, onError]);
+  const handleDownloadSvg = async () => {
+    if (!svgContainerRef.current) return;
+    const svgElement = svgContainerRef.current.querySelector('svg');
+    if (!svgElement) return;
+
+    setIsDownloading(true);
+
+    const clonedSvgElement = svgElement.cloneNode(true) as SVGSVGElement;
+
+    clonedSvgElement.removeAttribute('width');
+    clonedSvgElement.removeAttribute('height');
+    clonedSvgElement.style.width = '';
+    clonedSvgElement.style.height = '';
+    clonedSvgElement.style.maxWidth = 'none';
+    clonedSvgElement.style.maxHeight = 'none';
+
+    const style = document.createElement('style');
+    let css = '';
+    for (const sheet of Array.from(document.styleSheets)) {
+        try {
+            if (sheet.cssRules) {
+                css += Array.from(sheet.cssRules)
+                    .map(rule => rule.cssText)
+                    .join('\\n');
+            }
+        } catch (e) {
+            console.warn("Could not read CSS rules from stylesheet:", e);
+        }
+    }
+    style.appendChild(document.createTextNode(css));
+    clonedSvgElement.prepend(style);
+
+    const svgString = new XMLSerializer().serializeToString(clonedSvgElement);
+    const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(svgBlob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'diagram.svg';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    setTimeout(() => setIsDownloading(false), 1000);
+  };
+
+
 
   if (!code) {
     return (
-      <div className="flex items-center justify-center h-40 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg">
+      <div className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-6 mb-6 flex items-center justify-center" style={containerStyle}>
         <div className="text-center">
-          <div className="text-gray-500 dark:text-gray-400 text-sm">
-            No diagram to display
-          </div>
-          <div className="text-gray-400 dark:text-gray-500 text-xs mt-1">
-            Generate a diagram from your text
-          </div>
+          <div className="text-gray-500 dark:text-gray-400 text-sm">No diagram to display</div>
+          <div className="text-gray-400 dark:text-gray-500 text-xs mt-1">Generate a diagram from your text</div>
         </div>
       </div>
     );
@@ -150,12 +136,25 @@ export function MermaidDiagram({ code, onError }: MermaidDiagramProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-40 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg">
+      <div className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-6 mb-6 flex items-center justify-center" style={containerStyle}>
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
-          <div className="text-gray-500 dark:text-gray-400 text-sm">
-            Rendering diagram...
-          </div>
+          <div className="text-gray-500 dark:text-gray-400 text-sm">Rendering diagram...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 mb-6 flex items-center justify-center" style={containerStyle}>
+        <div className="text-center w-full">
+          <div className="text-red-600 dark:text-red-400 text-sm font-medium mb-1">Diagram Render Error</div>
+          <div className="text-red-500 dark:text-red-300 text-xs mb-2">{error}</div>
+          <details className="text-left">
+            <summary className="text-xs text-red-400 cursor-pointer">Show code</summary>
+            <pre className="text-xs text-red-300 mt-1 p-2 bg-red-900/10 rounded whitespace-pre-wrap max-h-96 overflow-auto">{code}</pre>
+          </details>
         </div>
       </div>
     );
@@ -163,14 +162,35 @@ export function MermaidDiagram({ code, onError }: MermaidDiagramProps) {
 
   return (
     <div className="w-full">
-      <div 
-        ref={elementRef} 
-        className="mermaid-container w-full overflow-auto bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4"
-        style={{
-          minHeight: '200px',
-          maxHeight: '80vh'
-        }}
-      />
+      <div className="flex justify-end mb-2 space-x-2">
+        <button
+          onClick={handleDownloadSvg}
+          className="px-4 py-2 rounded bg-gray-600 text-white text-sm font-medium hover:bg-gray-700 transition-colors flex items-center"
+          disabled={!svg || isDownloading}
+        >
+          <Download className={`mr-2 h-4 w-4 ${isDownloading ? 'animate-bounce' : ''}`} />
+          {isDownloading ? 'Downloading...' : 'Download SVG'}
+        </button>
+      </div>
+      <div
+        ref={svgContainerRef}
+        className="mermaid-container w-full overflow-auto bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-6 mb-6 h-auto"
+        style={containerStyle}
+      >
+        <style>{`
+          .mermaid-container svg {
+            width: 100% !important;
+            height: auto !important;
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+            margin: auto;
+          }
+        `}</style>
+        <div className="w-full h-full flex items-start justify-center">
+          <div dangerouslySetInnerHTML={{ __html: svg }} />
+        </div>
+      </div>
     </div>
   );
 }

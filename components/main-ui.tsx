@@ -12,7 +12,7 @@ const MainUI = () => {
   const handleDiagramGenerated = (code: string) => {
     setMermaidCode(code);
     setError(""); // Clear any previous errors
-    // Auto-switch to diagram tab on mobile after generation
+
     if (window.innerWidth < 768) {
       setActiveTab('diagram');
     }

@@ -19,7 +19,7 @@ const SettingsPage = () => {
   const [isSaving, setIsSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState('')
 
-  // Load saved data from localStorage on component mount
+  // Load saved data from localStorage
   useEffect(() => {
     try {
       const savedSettings = localStorage.getItem('merdiai-settings')
@@ -49,7 +49,6 @@ const SettingsPage = () => {
       // Show success message
       setSaveMessage('Settings saved successfully!')
       
-      // Clear message after 3 seconds
       setTimeout(() => {
         setSaveMessage('')
       }, 3000)
@@ -84,10 +83,8 @@ const SettingsPage = () => {
           </div>
         </div>
 
-        {/* Settings Form */}
         <div className="bg-white/20 dark:bg-black/20 backdrop-blur-sm rounded-2xl border border-white/30 dark:border-white/10 p-8 shadow-lg">
           
-          {/* AI Model Name Input */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-black dark:text-white mb-2">
               AI Model Name
@@ -134,7 +131,6 @@ const SettingsPage = () => {
             </p>
           </div>
 
-          {/* Save Message */}
           {saveMessage && (
             <div className={`mb-4 p-3 rounded-lg text-sm ${
               saveMessage.includes('Error') 
@@ -145,7 +141,6 @@ const SettingsPage = () => {
             </div>
           )}
 
-          {/* Action Buttons */}
           <div className="flex justify-end">
             <button
               onClick={handleSave}
@@ -158,7 +153,6 @@ const SettingsPage = () => {
           </div>
         </div>
 
-        {/* Info Section */}
         <div className="mt-6 p-4 bg-blue-100/50 dark:bg-blue-900/20 rounded-lg border border-blue-300/50 dark:border-blue-700/50">
           <h3 className="text-sm font-medium text-blue-800 dark:text-blue-300 mb-2">
              Getting Started with OpenRouter

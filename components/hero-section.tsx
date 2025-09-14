@@ -1,7 +1,15 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { SplineScene } from "./spline-scene";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+
+const SplineScene = dynamic(
+  () => import("./spline-scene").then((mod) => mod.SplineScene),
+  {
+    ssr: false,
+    loading: () => <div className="w-full h-full bg-gray-200 dark:bg-gray-800 animate-pulse" />,
+  }
+);
 
 export function HeroSection() {
   const router = useRouter();
@@ -15,7 +23,7 @@ export function HeroSection() {
             </h1>
             <p className="text-base md:text-lg text-muted-foreground mb-8 leading-relaxed">
               Instantly generate clear, customizable diagrams from your text.
-              Streamline your workflow and visualize ideas with MerdiAI—no
+              Streamline your workflow and visualize ideas with MerdiAI no
               design skills required.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
