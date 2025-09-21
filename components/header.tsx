@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button"
 import { Sun, Moon } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
+import Link from "next/link";
+
 
 export function Header() {
   const { theme, setTheme } = useTheme()
@@ -34,9 +36,12 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-4">
-          <Button variant="outline" className="rounded-full bg-transparent">
-            Contact
-          </Button>
+          <Link href="/contact" passHref>
+            <Button variant="outline" className="rounded-full bg-transparent">
+              Contact
+            </Button>
+          </Link>
+
           {mounted && (
             <Button
               variant="ghost"
