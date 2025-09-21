@@ -111,7 +111,7 @@ const App = () => {
             <div className="space-y-6">
               <div className="flex items-center space-x-4">
                 <Mail size={24} className="text-gray-600 dark:text-gray-400" />
-                <span className="text-lg text-gray-600 dark:text-gray-300">contact@merdial.com</span>
+                <span className="text-lg text-gray-600 dark:text-gray-300">contact@merdiai.com</span>
               </div>
               <div className="flex items-start space-x-4">
                 <MapPin size={24} className="text-gray-600 dark:text-gray-400 flex-shrink-0" />
