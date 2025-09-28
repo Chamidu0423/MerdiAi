@@ -37,7 +37,7 @@ const FaqPage = () => {
   ]
 
   const handleBack = () => {
-    router.push('/main-ui')
+    router.push('/')
   }
 
   return (
