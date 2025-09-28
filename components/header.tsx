@@ -30,9 +30,9 @@ export function Header() {
           <a href="#work" className="text-muted-foreground hover:text-foreground transition-colors">
             Guide
           </a>
-          <a href="#services" className="text-muted-foreground hover:text-foreground transition-colors">
-            Q & A
-          </a>
+          <Link href="/faq" className="text-muted-foreground hover:text-foreground transition-colors">
+            FAQ
+          </Link>
         </div>
 
         <div className="flex items-center gap-4">
