@@ -24,9 +24,9 @@ export function Header() {
         </div>
 
         <div className="hidden md:flex items-center gap-8">
-          <a href="#about" className="text-muted-foreground hover:text-foreground transition-colors">
+          <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors">
             About
-          </a>
+          </Link>
           <a href="#work" className="text-muted-foreground hover:text-foreground transition-colors">
             Guide
           </a>
