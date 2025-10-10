@@ -16,44 +16,64 @@ const SplineScene = dynamic(
 
 const teamMembers = [
   {
-    name: "John Anderson",
-    role: "Lead Developer",
-    bio: "Full-stack developer with a passion for creating intuitive AI-powered solutions. Specializes in React and Next.js.",
-    image: "/api/placeholder/150/150",
-    initials: "JA",
-    github: "#",
-    linkedin: "#",
-    email: "john@merdiai.com"
+    name: "Chamidu Dilshan",
+    role: "Lead Developer & Founder",
+    bio: "Passionate Software Engineering undergraduate exploring web development, mobile apps, and UI/UX design to build user-centric digital products.",
+    image: "https://avatars.githubusercontent.com/u/103932928?v=4",
+    initials: "CD",
+    github: "https://github.com/Chamidu0423",
+    linkedin: "https://www.linkedin.com/in/chamidu-dilshan-082b43274/",
+    email: "chamidudilshan0423@gmail.com"
   },
   {
-    name: "Sarah Chen",
-    role: "AI/ML Engineer",
-    bio: "Machine learning expert focused on natural language processing and diagram generation algorithms.",
-    image: "/api/placeholder/150/150",
-    initials: "SC",
-    github: "#",
-    linkedin: "#",
-    email: "sarah@merdiai.com"
+    name: "P.G. Asitha Kanchana",
+    role: "Full Stack Developer",
+    bio: "Software Engineering student passionate about React, web development, Python, and AI. Building innovative solutions with a focus on quality.",
+    image: "https://avatars.githubusercontent.com/u/114346362?v=4",
+    initials: "AK",
+    github: "https://github.com/AsithaKanchana1",
+    linkedin: "https://www.linkedin.com/in/asithakanchana/",
+    email: "asitha@merdiai.com"
   },
   {
-    name: "Michael Rodriguez",
-    role: "UX Designer",
-    bio: "Creative designer dedicated to crafting seamless user experiences with modern, accessible interfaces.",
-    image: "/api/placeholder/150/150",
-    initials: "MR",
-    github: "#",
-    linkedin: "#",
-    email: "michael@merdiai.com"
+    name: "Abdullah Al Sazib",
+    role: "Full Stack Developer",
+    bio: "Dedicated Full Stack Developer specializing in Go, React, and Node.js. Passionate about cybersecurity and building secure, scalable applications.",
+    image: "https://avatars.githubusercontent.com/u/99520600?v=4",
+    initials: "AS",
+    github: "https://github.com/abdullahalsazib",
+    linkedin: "https://www.linkedin.com/in/abdullah-al-sazib/",
+    email: "abdullahalsazib@gmail.com"
   },
   {
-    name: "Emily Watson",
-    role: "Product Manager",
-    bio: "Strategic thinker with a vision for transforming complex data into visual stories that everyone can understand.",
-    image: "/api/placeholder/150/150",
-    initials: "EW",
-    github: "#",
-    linkedin: "#",
-    email: "emily@merdiai.com"
+    name: "Vivek Prajapati",
+    role: "Frontend Developer",
+    bio: "Aspiring web developer from India learning new technologies every day. Specializing in frontend with JavaScript, HTML, and CSS.",
+    image: "https://avatars.githubusercontent.com/u/101943299?v=4",
+    initials: "VP",
+    github: "https://github.com/vivekprajapati-exe",
+    linkedin: "https://www.linkedin.com/in/vivek-prajapati-56b101259/",
+    email: "scuti.bgstar@gmail.com"
+  },
+  {
+    name: "Chanuka Dilshan",
+    role: "Backend Developer",
+    bio: "SE Undergraduate at NIBM with expertise in Java and C#. Passionate about backend development, cloud computing, and DevOps technologies.",
+    image: "https://avatars.githubusercontent.com/u/123976851?v=4",
+    initials: "CD",
+    github: "https://github.com/Chanukaa2002",
+    linkedin: "https://www.linkedin.com/in/chanuka-dilshan-21a076223/",
+    email: "mchanuka72@gmail.com"
+  },
+  {
+    name: "Nimesh Kolambage",
+    role: "Frontend Developer",
+    bio: "Frontend developer crafting engaging UI/UX experiences with React and JavaScript. Focused on creating beautiful, responsive interfaces.",
+    image: "https://avatars.githubusercontent.com/u/168950931?v=4",
+    initials: "NK",
+    github: "https://github.com/NimeshKolambage",
+    linkedin: "https://www.linkedin.com/in/nimesh-kolambage-595454346/",
+    email: "nimesh@merdiai.com"
   }
 ]
 
@@ -114,7 +134,7 @@ export function AboutPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {teamMembers.map((member, index) => (
               <Card 
                 key={index} 
