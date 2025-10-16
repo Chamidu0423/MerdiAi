@@ -2,7 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Github, Linkedin, Mail } from "lucide-react"
+import { Github, Linkedin, Mail, Rocket, Lightbulb, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import dynamic from "next/dynamic"
 
@@ -89,7 +89,7 @@ export function AboutPage() {
       <div className="container mx-auto px-4 py-16 max-w-7xl relative z-10">
         {/* Hero Section */}
         <div className="text-center mb-16 space-y-6">
-          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent animate-gradient">
+          <h1 className="text-5xl md:text-6xl font-bold text-white">
             About MerdiAI
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
@@ -99,7 +99,7 @@ export function AboutPage() {
 
         {/* Mission Section */}
         <section className="mb-20">
-          <Card className="border-2 hover:border-primary/50 transition-all duration-300 backdrop-blur-md bg-background/80">
+          <Card className="border border-border/50 transition-all duration-300 backdrop-blur-md bg-background/80">
             <CardContent className="p-8 md:p-12">
               <h2 className="text-3xl font-semibold mb-6 text-foreground">Our Mission</h2>
               <div className="space-y-4 text-muted-foreground text-lg leading-relaxed">
@@ -138,10 +138,10 @@ export function AboutPage() {
             {teamMembers.map((member, index) => (
               <Card 
                 key={index} 
-                className="group hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 hover:border-primary/50 backdrop-blur-md bg-background/80"
+                className="group hover:shadow-xl hover:scale-105 transition-all duration-300 border border-border/50 backdrop-blur-md bg-background/80"
               >
                 <CardContent className="p-6 flex flex-col items-center text-center space-y-4">
-                  <Avatar className="w-32 h-32 border-4 border-primary/20 group-hover:border-primary/50 transition-colors">
+                  <Avatar className="w-32 h-32 border-4 border-primary/20 transition-colors">
                     <AvatarImage src={member.image} alt={member.name} />
                     <AvatarFallback className="text-2xl font-semibold bg-gradient-to-br from-primary to-purple-500 text-primary-foreground">
                       {member.initials}
@@ -204,10 +204,10 @@ export function AboutPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="border-2 hover:border-primary/50 transition-all duration-300 backdrop-blur-md bg-background/80">
+            <Card className="border border-border/50 transition-all duration-300 backdrop-blur-md bg-background/80">
               <CardContent className="p-6 space-y-3">
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-2">
-                  <span className="text-2xl">🚀</span>
+                  <Rocket className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-semibold text-foreground">Innovation</h3>
                 <p className="text-muted-foreground">
@@ -217,10 +217,10 @@ export function AboutPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-2 hover:border-primary/50 transition-all duration-300 backdrop-blur-md bg-background/80">
+            <Card className="border border-border/50 transition-all duration-300 backdrop-blur-md bg-background/80">
               <CardContent className="p-6 space-y-3">
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-2">
-                  <span className="text-2xl">💡</span>
+                  <Lightbulb className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-semibold text-foreground">Simplicity</h3>
                 <p className="text-muted-foreground">
@@ -230,10 +230,10 @@ export function AboutPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-2 hover:border-primary/50 transition-all duration-300 backdrop-blur-md bg-background/80">
+            <Card className="border border-border/50 transition-all duration-300 backdrop-blur-md bg-background/80">
               <CardContent className="p-6 space-y-3">
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-2">
-                  <span className="text-2xl">🤝</span>
+                  <Users className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-semibold text-foreground">Community</h3>
                 <p className="text-muted-foreground">
@@ -247,7 +247,7 @@ export function AboutPage() {
 
         {/* CTA Section */}
         <section className="text-center">
-          <Card className="border-2 border-primary/30 bg-gradient-to-r from-primary/5 to-purple-500/5 backdrop-blur-md">
+          <Card className="border border-border/50 bg-gradient-to-r from-primary/5 to-purple-500/5 backdrop-blur-md">
             <CardContent className="p-12">
               <h2 className="text-3xl font-bold mb-4 text-foreground">Join Us on Our Journey</h2>
               <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">

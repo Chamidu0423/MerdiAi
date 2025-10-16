@@ -18,13 +18,13 @@ const ChatPanel = ({ onDiagramGenerated, onError }: ChatPanelProps) => {
     
     try {
       setIsGenerating(true);
-      onError(""); // Clear any previous errors
+      onError(""); 
       
       const response = await LLMService.generateMermaidDiagram(inputText.trim());
       
       if (response.success && response.mermaidCode) {
         onDiagramGenerated(response.mermaidCode);
-        setInputText(""); // Clear input on success
+        setInputText(""); 
       } else {
         onError(response.error || "Failed to generate diagram");
       }
@@ -54,7 +54,7 @@ const ChatPanel = ({ onDiagramGenerated, onError }: ChatPanelProps) => {
     >
       <div className="flex items-center gap-2 p-6 pb-0">
         <button className="p-2 cursor-pointer" onClick={() => router.push("/")}>
-          <ChevronLeft className=" w-7 h-7 text-black dark:text-white" />
+          <ChevronLeft className="w-5 h-5 text-black dark:text-white" />
         </button>
         <div className="flex items-center gap-2">
           <img src="/logo.png" alt="MerdiAI Logo" className="w-8 h-8 rounded" />
