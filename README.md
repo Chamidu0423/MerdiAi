@@ -50,7 +50,7 @@ Follow the steps below to run this project on your computer.
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/merdiai/merdiai.git](https://github.com/merdiai/merdiai.git)
+    git clone https://github.com/Chamidu0423/MerdiAi.git
     cd merdiai
     ```
 
