@@ -83,7 +83,7 @@ Follow the steps below to run this project on your computer.
         <sub><b>Chamidu Dilshan</b></sub>
       </a>
       <br />
-      <sub>Lead Developer & Founder</sub>
+      <sub>Lead Developer & Project manager</sub>
     </td>
     <td align="center">
       <a href="https://github.com/AsithaKanchana1">
